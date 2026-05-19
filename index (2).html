@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Boteco do Luiz</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;background:#0a1628;color:#f0f4ff;padding-bottom:110px}
+#hdr{position:fixed;top:0;left:0;right:0;background:#0a1628;padding:10px 16px 8px;border-bottom:1px solid rgba(255,255,255,.12);text-align:center;z-index:200}
+.hl{font-size:9px;letter-spacing:3px;color:#74b9ff;display:block;margin-bottom:2px}
+.ht{font-size:21px;font-weight:800;color:#f0f4ff}.ht b{color:#f9ca24}
+.hs{font-size:11px;color:rgba(240,244,255,.5);display:block;margin-top:1px}
+#hsp{height:68px}
+.tela{display:none;padding:14px}.tela.on{display:block}
+#tb{position:fixed;bottom:0;left:0;right:0;background:#0f1e38;border-top:2px solid rgba(255,255,255,.15);display:flex;width:100%;z-index:200;padding:8px 0 20px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;color:rgba(240,244,255,.4);font-size:10px;font-weight:600;border:none;background:none;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;gap:4px;min-height:56px}
+.tab.on{color:#f9ca24}
+.ti{font-size:30px;line-height:1;display:block}
+.tl{font-size:10px;display:block;letter-spacing:0.2px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:14px;margin-bottom:12px}
+.ctit{font-size:9px;letter-spacing:2.5px;color:#f9ca24;text-transform:uppercase;font-weight:700;display:block;margin-bottom:12px}
+/* MÉTRICAS — tabela simples */
+.mtbl{width:100%;border-collapse:separate;border-spacing:8px;margin:-8px;margin-bottom:4px}
+.met{background:rgba(255,255,255,.05);border-radius:10px;padding:11px 6px;text-align:center;width:50%}
+.mlbl{font-size:9px;letter-spacing:1px;color:#74b9ff;text-transform:uppercase;display:block;margin-bottom:3px}
+.mval{font-size:20px;font-weight:800;display:block;line-height:1}
+.mg{color:#55efc4}.my{color:#fdcb6e}.mo{color:#f9ca24}.sm{font-size:13px}
+/* PROGRESS */
+.prow{overflow:hidden;font-size:10px;color:#74b9ff;margin-bottom:5px;margin-top:8px}
+.prow span{float:right}
+.ptr{height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;clear:both}
+.pfl{height:100%;background:#f9ca24;border-radius:3px}
+/* COUNTDOWN */
+.cdown{background:rgba(249,202,36,.08);border:1px solid rgba(249,202,36,.2);border-radius:12px;padding:16px 8px;margin-bottom:12px;display:table;width:100%;box-sizing:border-box}
+.cdu{display:table-cell;text-align:center}
+.cdn{font-size:30px;font-weight:800;color:#f9ca24;display:block;line-height:1}
+.cdl{font-size:9px;letter-spacing:1.5px;color:#74b9ff;text-transform:uppercase;display:block;margin-top:3px}
+.cds{display:table-cell;text-align:center;font-size:22px;color:rgba(249,202,36,.3);vertical-align:middle;width:18px}
+/* INFO */
+.istrip{background:#f0932b;border-radius:12px;padding:14px;margin-bottom:10px}
+.ist-t{font-size:17px;font-weight:800;color:#fff;display:block;margin-bottom:2px}
+.ist-s{font-size:11px;color:rgba(255,255,255,.85);display:block}
+.igrid{overflow:hidden;margin-bottom:10px}
+.icel{float:left;width:calc(50% - 4px);background:rgba(255,255,255,.1);border-radius:10px;padding:10px;margin-bottom:8px}
+.icel:nth-child(odd){margin-right:8px}
+.icl{font-size:9px;letter-spacing:1.5px;color:#74b9ff;text-transform:uppercase;display:block;margin-bottom:3px}
+.icv{font-size:13px;font-weight:600;color:#f0f4ff;display:block}
+.showc{background:rgba(249,202,36,.08);border:1px solid rgba(249,202,36,.25);border-radius:12px;padding:14px;text-align:center;margin-bottom:10px}
+.showt{font-size:9px;letter-spacing:2px;color:#f9ca24;display:block;margin-bottom:3px}
+.shown{font-size:21px;font-weight:800;color:#f9ca24;display:block;margin-bottom:2px}
+.shows{font-size:10px;letter-spacing:2px;color:#f0932b;display:block}
+.descc{background:rgba(255,255,255,.04);border-radius:12px;padding:12px;font-size:13px;color:#74b9ff;text-align:center;line-height:1.65;font-style:italic;margin-bottom:10px}
+/* LISTAS */
+.gitem{overflow:hidden;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.gitem:last-child{border-bottom:none}
+.av{float:left;width:34px;height:34px;border-radius:50%;background:#1e3799;text-align:center;line-height:34px;font-size:12px;font-weight:700;color:#74b9ff;margin-right:8px}
+.gact{float:right}
+.gname{display:block;font-size:13px;color:#f0f4ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-top:7px}
+.ssel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:7px;color:#f0f4ff;font-size:11px;padding:5px 5px;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-appearance:none;cursor:pointer;float:left;margin-right:4px}
+.ssel.sc{border-color:rgba(85,239,196,.5);color:#55efc4}.ssel.sp{border-color:rgba(253,203,110,.5);color:#fdcb6e}
+.xb{background:none;border:none;color:rgba(255,107,107,.65);font-size:17px;padding:4px 5px;cursor:pointer;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;float:left;line-height:1}
+.eitem{overflow:hidden;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.eitem:last-child{border-bottom:none}
+.eif{overflow:hidden}
+.ename{font-size:13px;color:#f0f4ff;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eprov{font-size:10px;color:#74b9ff;display:block;margin-top:1px}
+.ev{float:right;text-align:right;min-width:90px;padding-left:8px}
+.epd{font-size:11px;color:#55efc4;display:block}.edd{font-size:11px;color:#fdcb6e;display:block}
+.etot{font-size:13px;font-weight:700;color:#f0f4ff;display:block}
+.titem{overflow:hidden;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.titem:last-child{border-bottom:none}
+.tck{float:left;width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:none;text-align:center;line-height:20px;font-size:13px;font-weight:800;color:transparent;margin-right:8px;cursor:pointer}
+.tck.done{background:#f9ca24;border-color:#f9ca24;color:#0c2461}
+.ttx{display:block;font-size:13px;color:#f0f4ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-top:3px}
+.ttx.done{text-decoration:line-through;color:rgba(255,255,255,.3)}
+.tmeta{float:right;font-size:10px;color:#74b9ff;padding-top:5px;margin-left:4px}
+/* BADGE */
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;margin:2px}
+.bg{background:rgba(85,239,196,.12);color:#55efc4;border:1px solid rgba(85,239,196,.25)}
+.by{background:rgba(253,203,110,.12);color:#fdcb6e;border:1px solid rgba(253,203,110,.25)}
+/* FORM */
+.inp{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#f0f4ff;font-size:16px;padding:11px 12px;width:100%;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-appearance:none;display:block;margin-bottom:8px}
+.inp:focus{outline:none;border-color:#f9ca24}
+.inp::placeholder{color:rgba(255,255,255,.3)}
+select.inp{cursor:pointer}
+textarea.inp{min-height:150px;resize:none;line-height:1.65}
+.inp2{float:left;width:calc(50% - 4px);margin-right:8px}
+.inp2:last-child{margin-right:0}
+.row2{overflow:hidden;margin-bottom:8px}
+.btn{border:none;border-radius:10px;font-size:15px;font-weight:700;padding:13px;cursor:pointer;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-appearance:none;display:block;width:100%;margin-bottom:8px;background:#f9ca24;color:#0c2461}
+.btn:active{opacity:.82}
+.btn2{background:rgba(30,55,153,.85);color:#f9ca24;border:1px solid rgba(249,202,36,.3)}
+.btnrow{overflow:hidden;margin-top:4px}
+.btnhalf{float:left;width:calc(50% - 4px)}.btnhalf:first-child{margin-right:8px}
+/* UPLOAD */
+.upa{border:2px dashed rgba(255,255,255,.15);border-radius:12px;padding:22px;text-align:center;cursor:pointer;margin-bottom:12px}
+.upi{font-size:30px;display:block;margin-bottom:8px}
+.upt{font-size:13px;color:rgba(240,244,255,.5);display:block;line-height:1.5}
+.upt strong{color:#f9ca24}
+.fite{overflow:hidden;padding:8px 10px;background:rgba(85,239,196,.08);border:1px solid rgba(85,239,196,.2);border-radius:8px;margin-bottom:6px;font-size:12px;color:#55efc4}
+/* TOAST */
+#toast{position:fixed;bottom:90px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);background:#f9ca24;color:#0c2461;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:700;pointer-events:none;z-index:9999;white-space:nowrap;max-width:88vw;text-align:center;display:none}
+.cf:after{content:'';display:table;clear:both}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <span class="hl">Convite Especial &bull; Recife</span>
+  <div class="ht">Boteco do <b>Luiz</b></div>
+  <span class="hs">31 Anos &bull; 12 de Junho de 2026</span>
+</div>
+<div id="hsp"></div>
+
+<!-- TELA 0: INICIO -->
+<div class="tela on" id="t0">
+  <div class="cdown">
+    <div class="cdu"><span class="cdn" id="cdd">--</span><span class="cdl">Dias</span></div>
+    <span class="cds">:</span>
+    <div class="cdu"><span class="cdn" id="cdh">--</span><span class="cdl">Horas</span></div>
+    <span class="cds">:</span>
+    <div class="cdu"><span class="cdn" id="cdm">--</span><span class="cdl">Min</span></div>
+  </div>
+  <div class="istrip"><span class="ist-t">&#127881; 31 Anos!</span><span class="ist-s">Bora Comemorar! Dia incr&iacute;vel garantido</span></div>
+  <div class="igrid cf">
+    <div class="icel"><span class="icl">Data</span><span class="icv">12 de junho</span></div>
+    <div class="icel"><span class="icl">Hor&aacute;rio</span><span class="icv">12h &agrave;s 18h</span></div>
+    <div class="icel"><span class="icl">Local</span><span class="icv">Ecovila Praia</span></div>
+    <div class="icel"><span class="icl">Endere&ccedil;o</span><span class="icv">R. Alto Araguaia, 01</span></div>
+  </div>
+  <div class="showc"><span class="showt">&#10024; ATRA&Ccedil;&Atilde;O ESPECIAL</span><span class="shown">Soraya Oliver</span><span class="shows">SHOW AO VIVO</span></div>
+  <div class="descc">Vai ter churrasco, feijoada, Skol Beats gelada e muito entretenimento!<br>Vem com aquela pegada praiana que a festa vai ser boa demais! &#127958;</div>
+  <div class="card">
+    <span class="ctit">Resumo da Festa</span>
+    <table class="mtbl"><tr>
+      <td class="met"><span class="mlbl">Confirmados</span><span class="mval mg" id="sc">18</span></td>
+      <td class="met"><span class="mlbl">Pendentes</span><span class="mval my" id="spe">6</span></td>
+    </tr><tr>
+      <td class="met"><span class="mlbl">Total Pago</span><span class="mval mg sm" id="spg">R$2192.50</span></td>
+      <td class="met"><span class="mlbl">A Pagar</span><span class="mval my sm" id="sad">R$2420.00</span></td>
+    </tr></table>
+    <div class="prow">Pagamentos <span id="spct">47%</span></div>
+    <div class="ptr"><div class="pfl" id="sbar" style="width:47%"></div></div>
+  </div>
+  <div class="card">
+    <span class="ctit">Tarefas</span>
+    <div style="text-align:center;padding:6px 0">
+      <span class="mval mo" id="std" style="font-size:34px">0</span>
+      <span style="color:#74b9ff;font-size:16px"> / </span>
+      <span style="color:#74b9ff;font-size:18px;font-weight:700" id="stt">8</span>
+      <span style="color:#74b9ff;font-size:12px;display:block;margin-top:4px">conclu&iacute;das</span>
+    </div>
+  </div>
+  <div class="btnrow">
+    <div class="btnhalf"><button class="btn" onclick="doSave()">&#128190; Salvar</button></div>
+    <div class="btnhalf"><button class="btn btn2" onclick="doShare()">&#128228; Compartilhar</button></div>
+  </div>
+</div>
+
+<!-- TELA 1: CONVIDADOS -->
+<div class="tela" id="t1">
+  <div class="card">
+    <span class="ctit">Lista de Convidados</span>
+    <div id="gbdg" style="margin-bottom:10px">
+      <span class="badge bg">Confirmados: <span id="nc">18</span></span>
+      <span class="badge by">Pendentes: <span id="np">6</span></span>
+    </div>
+    <div id="glist">
+<div class="gitem" id="gi0">
+  <div class="av">CH</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(0,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(0)">&#x2715;</button>
+  </div>
+  <span class="gname">Claudio Henrique</span>
+</div>
+<div class="gitem" id="gi1">
+  <div class="av">CF</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(1,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(1)">&#x2715;</button>
+  </div>
+  <span class="gname">Claudio Ferreira</span>
+</div>
+<div class="gitem" id="gi2">
+  <div class="av">EB</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(2,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(2)">&#x2715;</button>
+  </div>
+  <span class="gname">Emilly Barbosa</span>
+</div>
+<div class="gitem" id="gi3">
+  <div class="av">DB</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(3,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(3)">&#x2715;</button>
+  </div>
+  <span class="gname">Danielle Barbosa</span>
+</div>
+<div class="gitem" id="gi4">
+  <div class="av">FM</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(4,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(4)">&#x2715;</button>
+  </div>
+  <span class="gname">Fellipe Morais</span>
+</div>
+<div class="gitem" id="gi5">
+  <div class="av">HA</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(5,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(5)">&#x2715;</button>
+  </div>
+  <span class="gname">Hebert Alves</span>
+</div>
+<div class="gitem" id="gi6">
+  <div class="av">JR</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(6,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(6)">&#x2715;</button>
+  </div>
+  <span class="gname">Jeff Rozendo</span>
+</div>
+<div class="gitem" id="gi7">
+  <div class="av">JF</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(7,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(7)">&#x2715;</button>
+  </div>
+  <span class="gname">Jennifer Ferreira</span>
+</div>
+<div class="gitem" id="gi8">
+  <div class="av">NP</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(8,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(8)">&#x2715;</button>
+  </div>
+  <span class="gname">Neyton Pereira</span>
+</div>
+<div class="gitem" id="gi9">
+  <div class="av">LM</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(9,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(9)">&#x2715;</button>
+  </div>
+  <span class="gname">Lavinia Maira</span>
+</div>
+<div class="gitem" id="gi10">
+  <div class="av">SF</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(10,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(10)">&#x2715;</button>
+  </div>
+  <span class="gname">Suzanne Ferreira</span>
+</div>
+<div class="gitem" id="gi11">
+  <div class="av">RD</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(11,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(11)">&#x2715;</button>
+  </div>
+  <span class="gname">Ronny Diego</span>
+</div>
+<div class="gitem" id="gi12">
+  <div class="av">SL</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(12,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(12)">&#x2715;</button>
+  </div>
+  <span class="gname">Sidney Lopes</span>
+</div>
+<div class="gitem" id="gi13">
+  <div class="av">TA</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(13,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(13)">&#x2715;</button>
+  </div>
+  <span class="gname">Thiago Araujo</span>
+</div>
+<div class="gitem" id="gi14">
+  <div class="av">VB</div>
+  <div class="gact">
+    <select class="ssel sp" onchange="chgG(14,this)">
+      <option>Confirmado</option>
+      <option  selected>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(14)">&#x2715;</button>
+  </div>
+  <span class="gname">Vinicius Barreto</span>
+</div>
+<div class="gitem" id="gi15">
+  <div class="av">VB</div>
+  <div class="gact">
+    <select class="ssel sp" onchange="chgG(15,this)">
+      <option>Confirmado</option>
+      <option  selected>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(15)">&#x2715;</button>
+  </div>
+  <span class="gname">Vitor Barreto</span>
+</div>
+<div class="gitem" id="gi16">
+  <div class="av">PH</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(16,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(16)">&#x2715;</button>
+  </div>
+  <span class="gname">Paulo Henrique</span>
+</div>
+<div class="gitem" id="gi17">
+  <div class="av">KS</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(17,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(17)">&#x2715;</button>
+  </div>
+  <span class="gname">Kause Silva</span>
+</div>
+<div class="gitem" id="gi18">
+  <div class="av">PM</div>
+  <div class="gact">
+    <select class="ssel sp" onchange="chgG(18,this)">
+      <option>Confirmado</option>
+      <option  selected>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(18)">&#x2715;</button>
+  </div>
+  <span class="gname">Paulina Monacci</span>
+</div>
+<div class="gitem" id="gi19">
+  <div class="av">BS</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(19,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(19)">&#x2715;</button>
+  </div>
+  <span class="gname">Bruno Stefano</span>
+</div>
+<div class="gitem" id="gi20">
+  <div class="av">BC</div>
+  <div class="gact">
+    <select class="ssel sc" onchange="chgG(20,this)">
+      <option  selected>Confirmado</option>
+      <option>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(20)">&#x2715;</button>
+  </div>
+  <span class="gname">Bruno Cavalcanti</span>
+</div>
+<div class="gitem" id="gi21">
+  <div class="av">J</div>
+  <div class="gact">
+    <select class="ssel sp" onchange="chgG(21,this)">
+      <option>Confirmado</option>
+      <option  selected>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(21)">&#x2715;</button>
+  </div>
+  <span class="gname">Janielly</span>
+</div>
+<div class="gitem" id="gi22">
+  <div class="av">MM</div>
+  <div class="gact">
+    <select class="ssel sp" onchange="chgG(22,this)">
+      <option>Confirmado</option>
+      <option  selected>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(22)">&#x2715;</button>
+  </div>
+  <span class="gname">Mayara Miranda</span>
+</div>
+<div class="gitem" id="gi23">
+  <div class="av">LC</div>
+  <div class="gact">
+    <select class="ssel sp" onchange="chgG(23,this)">
+      <option>Confirmado</option>
+      <option  selected>Pendente</option>
+    </select>
+    <button class="xb" onclick="delG(23)">&#x2715;</button>
+  </div>
+  <span class="gname">Larissa Carolayne</span>
+</div>
+    </div>
+    <div style="margin-top:14px">
+      <input class="inp" id="gnm" type="text" placeholder="Nome do convidado" autocorrect="off" autocapitalize="words">
+      <div class="row2">
+        <select class="inp inp2" id="gst"><option>Confirmado</option><option>Pendente</option></select>
+        <button class="btn inp2" style="margin-bottom:0" onclick="addG()">+ Adicionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TELA 2: GASTOS -->
+<div class="tela" id="t2">
+  <div class="card">
+    <span class="ctit">Or&ccedil;amento</span>
+    <table class="mtbl"><tr>
+      <td class="met"><span class="mlbl">Pago</span><span class="mval mg sm" id="epg">R$2192.50</span></td>
+      <td class="met"><span class="mlbl">Pendente</span><span class="mval my sm" id="epd">R$2420.00</span></td>
+    </tr></table>
+    <div class="prow">Total: <strong id="ett" style="color:#f0f4ff">R$4612.50</strong> <span id="epct">47%</span></div>
+    <div class="ptr"><div class="pfl" id="ebar" style="width:47%"></div></div>
+    <div id="elist" style="margin-top:12px">
+<div class="eitem" id="ei0">
+  <div class="ev"><span class="epd">R$109.00</span><span class="etot">R$109.00</span>
+    <button class="xb" onclick="delE(0)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Salão de Festa</span><span class="eprov">Ecovila Praia</span></div>
+</div>
+<div class="eitem" id="ei1">
+  <div class="ev"><span class="epd">R$115.00</span><span class="edd">-R$115.00</span><span class="etot">R$230.00</span>
+    <button class="xb" onclick="delE(1)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Bolo</span><span class="eprov">Jh Tortas</span></div>
+</div>
+<div class="eitem" id="ei2">
+  <div class="ev"><span class="epd">R$200.00</span><span class="edd">-R$300.00</span><span class="etot">R$500.00</span>
+    <button class="xb" onclick="delE(2)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Banda Show</span><span class="eprov">Soraya Oliver</span></div>
+</div>
+<div class="eitem" id="ei3">
+  <div class="ev"><span class="edd">-R$450.00</span><span class="etot">R$450.00</span>
+    <button class="xb" onclick="delE(3)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Churrasco</span><span class="eprov">Julio</span></div>
+</div>
+<div class="eitem" id="ei4">
+  <div class="ev"><span class="epd">R$909.00</span><span class="etot">R$909.00</span>
+    <button class="xb" onclick="delE(4)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Skol Beats</span><span class="eprov">---</span></div>
+</div>
+<div class="eitem" id="ei5">
+  <div class="ev"><span class="edd">-R$15.00</span><span class="etot">R$15.00</span>
+    <button class="xb" onclick="delE(5)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Água</span><span class="eprov">---</span></div>
+</div>
+<div class="eitem" id="ei6">
+  <div class="ev"><span class="edd">-R$150.00</span><span class="etot">R$150.00</span>
+    <button class="xb" onclick="delE(6)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Refrigerante</span><span class="eprov">---</span></div>
+</div>
+<div class="eitem" id="ei7">
+  <div class="ev"><span class="edd">-R$50.00</span><span class="etot">R$50.00</span>
+    <button class="xb" onclick="delE(7)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Gelo</span><span class="eprov">---</span></div>
+</div>
+<div class="eitem" id="ei8">
+  <div class="ev"><span class="epd">R$125.00</span><span class="edd">-R$125.00</span><span class="etot">R$250.00</span>
+    <button class="xb" onclick="delE(8)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Fotógrafo</span><span class="eprov">Claudio F.</span></div>
+</div>
+<div class="eitem" id="ei9">
+  <div class="ev"><span class="edd">-R$300.00</span><span class="etot">R$300.00</span>
+    <button class="xb" onclick="delE(9)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Doces 150un</span><span class="eprov">Casa dos Doces</span></div>
+</div>
+<div class="eitem" id="ei10">
+  <div class="ev"><span class="edd">-R$300.00</span><span class="etot">R$300.00</span>
+    <button class="xb" onclick="delE(10)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Salgados 300un</span><span class="eprov">Casa dos Doces</span></div>
+</div>
+<div class="eitem" id="ei11">
+  <div class="ev"><span class="epd">R$332.50</span><span class="etot">R$332.50</span>
+    <button class="xb" onclick="delE(11)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Copos</span><span class="eprov">Af Print Gráfica</span></div>
+</div>
+<div class="eitem" id="ei12">
+  <div class="ev"><span class="epd">R$12.00</span><span class="etot">R$12.00</span>
+    <button class="xb" onclick="delE(12)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Topo Doces</span><span class="eprov">Sertão Moderno</span></div>
+</div>
+<div class="eitem" id="ei13">
+  <div class="ev"><span class="epd">R$390.00</span><span class="edd">-R$615.00</span><span class="etot">R$1005.00</span>
+    <button class="xb" onclick="delE(13)">&#x2715;</button>
+  </div>
+  <div class="eif"><span class="ename">Decoração</span><span class="eprov">Montando Fest</span></div>
+</div>
+    </div>
+    <div style="margin-top:14px">
+      <input class="inp" id="eit" type="text" placeholder="Item" autocorrect="off">
+      <input class="inp" id="efo" type="text" placeholder="Fornecedor" autocorrect="off">
+      <div class="row2">
+        <input class="inp inp2" id="epg2" type="number" placeholder="Pago R$" min="0" step="0.01" inputmode="decimal">
+        <input class="inp inp2" id="epe" type="number" placeholder="Pend R$" min="0" step="0.01" inputmode="decimal">
+      </div>
+      <button class="btn" onclick="addE()">+ Adicionar Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- TELA 3: TAREFAS -->
+<div class="tela" id="t3">
+  <div class="card">
+    <span class="ctit">Checklist</span>
+    <div id="tlist">
+<div class="titem" id="ti0">
+  <button class="xb" onclick="delT(0)" style="float:right">&#x2715;</button>
+  <span class="tmeta">Até 01/06</span>
+  <div class="tck" id="tc0" onclick="togT(0)"></div>
+  <span class="ttx" id="tx0">Confirmar Soraya Oliver</span>
+</div>
+<div class="titem" id="ti1">
+  <button class="xb" onclick="delT(1)" style="float:right">&#x2715;</button>
+  <span class="tmeta">Julio</span>
+  <div class="tck" id="tc1" onclick="togT(1)"></div>
+  <span class="ttx" id="tx1">Confirmar churrasco com Julio</span>
+</div>
+<div class="titem" id="ti2">
+  <button class="xb" onclick="delT(2)" style="float:right">&#x2715;</button>
+  <span class="tmeta">Jh Tortas</span>
+  <div class="tck" id="tc2" onclick="togT(2)"></div>
+  <span class="ttx" id="tx2">Pagar saldo do bolo</span>
+</div>
+<div class="titem" id="ti3">
+  <button class="xb" onclick="delT(3)" style="float:right">&#x2715;</button>
+  <span class="tmeta">M. Fest</span>
+  <div class="tck" id="tc3" onclick="togT(3)"></div>
+  <span class="ttx" id="tx3">Pagar saldo da decoração</span>
+</div>
+<div class="titem" id="ti4">
+  <button class="xb" onclick="delT(4)" style="float:right">&#x2715;</button>
+  <span class="tmeta">Claudio F.</span>
+  <div class="tck" id="tc4" onclick="togT(4)"></div>
+  <span class="ttx" id="tx4">Confirmar fotógrafo</span>
+</div>
+<div class="titem" id="ti5">
+  <button class="xb" onclick="delT(5)" style="float:right">&#x2715;</button>
+  <span class="tmeta">Casa Doces</span>
+  <div class="tck" id="tc5" onclick="togT(5)"></div>
+  <span class="ttx" id="tx5">Buscar doces e salgados</span>
+</div>
+<div class="titem" id="ti6">
+  <button class="xb" onclick="delT(6)" style="float:right">&#x2715;</button>
+  <span class="tmeta">Até 08/06</span>
+  <div class="tck" id="tc6" onclick="togT(6)"></div>
+  <span class="ttx" id="tx6">Confirmar lista de convidados</span>
+</div>
+<div class="titem" id="ti7">
+  <button class="xb" onclick="delT(7)" style="float:right">&#x2715;</button>
+  <span class="tmeta">12/06</span>
+  <div class="tck" id="tc7" onclick="togT(7)"></div>
+  <span class="ttx" id="tx7">Organizar mesa</span>
+</div>
+    </div>
+    <div style="margin-top:14px">
+      <input class="inp" id="ttx" type="text" placeholder="Nova tarefa..." autocorrect="off">
+      <input class="inp" id="tme" type="text" placeholder="Data / Respons&aacute;vel" autocorrect="off">
+      <button class="btn" onclick="addT()">+ Adicionar Tarefa</button>
+    </div>
+  </div>
+</div>
+
+<!-- TELA 4: NOTAS -->
+<div class="tela" id="t4">
+  <div class="card">
+    <span class="ctit">Notas Livres</span>
+    <textarea class="inp" id="nta" rows="10" placeholder="Anota&ccedil;&otilde;es, ideias, lembretes...">Boteco do Luiz - 31 Anos
+
+Local: Ecovila Praia
+Rua Alto Araguaia, 01
+Data: 12/06/2026 | 12h as 18h
+
+Atracao: Soraya Oliver
+Vai ter churrasco, feijoada, Skol Beats!
+Tema: Boteco e Praia</textarea>
+  </div>
+  <div class="card">
+    <span class="ctit">Arquivos</span>
+    <div class="upa" onclick="document.getElementById('fi').click()">
+      <span class="upi">&#128206;</span>
+      <span class="upt">Toque para enviar arquivo<br><strong>Fotos &bull; PDFs &bull; Planilhas</strong></span>
+    </div>
+    <input type="file" id="fi" accept="image/*,.pdf,.ods,.xlsx,.csv" multiple style="display:none" onchange="addF(this)">
+    <div id="flist"></div>
+  </div>
+  <div class="btnrow">
+    <div class="btnhalf"><button class="btn" onclick="doSave()">&#128190; Salvar</button></div>
+    <div class="btnhalf"><button class="btn btn2" onclick="doShare()">&#128228; Compartilhar</button></div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div id="tb">
+  <button class="tab on"  onclick="goTo(0)" title="Início"><span class="ti">&#127968;</span><span class="tl">Início</span></button>
+  <button class="tab"     onclick="goTo(1)" title="Convidados"><span class="ti">&#128101;</span><span class="tl">Convidados</span></button>
+  <button class="tab"     onclick="goTo(2)" title="Gastos"><span class="ti">&#128184;</span><span class="tl">Gastos</span></button>
+  <button class="tab"     onclick="goTo(3)" title="Tarefas"><span class="ti">&#9989;</span><span class="tl">Tarefas</span></button>
+  <button class="tab"     onclick="goTo(4)" title="Notas"><span class="ti">&#128203;</span><span class="tl">Notas</span></button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* DADOS EM MEMÓRIA */
+var G=[{n:'Claudio Henrique',s:'Confirmado'},{n:'Claudio Ferreira',s:'Confirmado'},{n:'Emilly Barbosa',s:'Confirmado'},{n:'Danielle Barbosa',s:'Confirmado'},{n:'Fellipe Morais',s:'Confirmado'},{n:'Hebert Alves',s:'Confirmado'},{n:'Jeff Rozendo',s:'Confirmado'},{n:'Jennifer Ferreira',s:'Confirmado'},{n:'Neyton Pereira',s:'Confirmado'},{n:'Lavinia Maira',s:'Confirmado'},{n:'Suzanne Ferreira',s:'Confirmado'},{n:'Ronny Diego',s:'Confirmado'},{n:'Sidney Lopes',s:'Confirmado'},{n:'Thiago Araujo',s:'Confirmado'},{n:'Vinicius Barreto',s:'Pendente'},{n:'Vitor Barreto',s:'Pendente'},{n:'Paulo Henrique',s:'Confirmado'},{n:'Kause Silva',s:'Confirmado'},{n:'Paulina Monacci',s:'Pendente'},{n:'Bruno Stefano',s:'Confirmado'},{n:'Bruno Cavalcanti',s:'Confirmado'},{n:'Janielly',s:'Pendente'},{n:'Mayara Miranda',s:'Pendente'},{n:'Larissa Carolayne',s:'Pendente'}];
+var E=[{i:'Salão de Festa',f:'Ecovila Praia',p:109,e:0},{i:'Bolo',f:'Jh Tortas',p:115,e:115},{i:'Banda Show',f:'Soraya Oliver',p:200,e:300},{i:'Churrasco',f:'Julio',p:0,e:450},{i:'Skol Beats',f:'---',p:909,e:0},{i:'Água',f:'---',p:0,e:15},{i:'Refrigerante',f:'---',p:0,e:150},{i:'Gelo',f:'---',p:0,e:50},{i:'Fotógrafo',f:'Claudio F.',p:125,e:125},{i:'Doces 150un',f:'Casa dos Doces',p:0,e:300},{i:'Salgados 300un',f:'Casa dos Doces',p:0,e:300},{i:'Copos',f:'Af Print Gráfica',p:332.5,e:0},{i:'Topo Doces',f:'Sertão Moderno',p:12,e:0},{i:'Decoração',f:'Montando Fest',p:390,e:615}];
+var T=[{t:'Confirmar Soraya Oliver',m:'Até 01/06',d:false},{t:'Confirmar churrasco com Julio',m:'Julio',d:false},{t:'Pagar saldo do bolo',m:'Jh Tortas',d:false},{t:'Pagar saldo da decoração',m:'M. Fest',d:false},{t:'Confirmar fotógrafo',m:'Claudio F.',d:false},{t:'Buscar doces e salgados',m:'Casa Doces',d:false},{t:'Confirmar lista de convidados',m:'Até 08/06',d:false},{t:'Organizar mesa',m:'12/06',d:false}];
+
+/* TOAST */
+var _tt;
+function toast(m){
+  var e=document.getElementById('toast');
+  e.textContent=m;e.style.display='block';
+  clearTimeout(_tt);_tt=setTimeout(function(){e.style.display='none';},2500);
+}
+
+/* NAVEGAÇÃO — mostrar/ocultar tela */
+function goTo(n){
+  for(var i=0;i<5;i++){
+    var t=document.getElementById('t'+i);
+    if(t)t.className='tela'+(i===n?' on':'');
+  }
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++)tabs[i].className='tab'+(i===n?' on':'');
+  window.scrollTo(0,0);
+  if(n===0)updH();
+  if(n===1)updG();
+  if(n===2)updE();
+  if(n===3)updT();
+}
+
+/* UTILS */
+function pad(n){return(n<10?'0':'')+n;}
+function ini(s){var p=(s||'').trim().split(/\s+/),r='';for(var i=0;i<p.length&&i<2;i++)if(p[i])r+=p[i][0].toUpperCase();return r||'?';}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $$(id){return document.getElementById(id);}
+function st(id,v){var e=$$(id);if(e)e.textContent=String(v);}
+
+/* COUNTDOWN */
+function tick(){
+  var d=new Date(2026,5,12,12,0,0)-new Date();
+  if(d<=0){st('cdd','00');st('cdh','00');st('cdm','00');return;}
+  st('cdd',pad(Math.floor(d/86400000)));
+  st('cdh',pad(Math.floor((d%86400000)/3600000)));
+  st('cdm',pad(Math.floor((d%3600000)/60000)));
+}
+
+/* HOME */
+function updH(){
+  var c=0,p=0,pg=0,ad=0,td=0;
+  for(var i=0;i<G.length;i++)G[i].s==='Confirmado'?c++:p++;
+  for(var i=0;i<E.length;i++){pg+=E[i].p||0;ad+=E[i].e||0;}
+  for(var i=0;i<T.length;i++)if(T[i].d)td++;
+  var tot=pg+ad,pct=tot>0?Math.round(pg/tot*100):0;
+  st('sc',c);st('spe',p);st('spg','R$'+pg.toFixed(2));st('sad','R$'+ad.toFixed(2));
+  st('spct',pct+'%');$$('sbar').style.width=pct+'%';
+  st('std',td);st('stt',T.length);
+}
+
+/* CONVIDADOS */
+function updG(){
+  var c=0,p=0,h='';
+  for(var i=0;i<G.length;i++)G[i].s==='Confirmado'?c++:p++;
+  st('nc',c);st('np',p);
+  for(var i=0;i<G.length;i++){
+    var cls=G[i].s==='Confirmado'?'sc':'sp';
+    h+='<div class="gitem"><div class="av">'+ini(G[i].n)+'</div>'+
+      '<div class="gact">'+
+        '<select class="ssel '+cls+'" onchange="chgG('+i+',this.value)">'+
+          '<option'+(G[i].s==='Confirmado'?' selected':'')+'>Confirmado</option>'+
+          '<option'+(G[i].s!=='Confirmado'?' selected':'')+'>Pendente</option>'+
+        '</select>'+
+        '<button class="xb" onclick="delG('+i+')">&#x2715;</button>'+
+      '</div>'+
+      '<span class="gname">'+esc(G[i].n)+'</span></div>';
+  }
+  $$('glist').innerHTML=h;
+}
+function chgG(i,v){G[i].s=v;updG();updH();}
+function delG(i){G.splice(i,1);updG();updH();}
+function addG(){
+  var nm=$$('gnm'),st2=$$('gst');
+  var v=(nm?nm.value:'').trim();
+  if(!v){toast('Digite o nome!');return;}
+  G.push({n:v,s:st2?st2.value:'Confirmado'});
+  if(nm)nm.value='';
+  updG();updH();toast('Adicionado: '+v);
+}
+
+/* GASTOS */
+function updE(){
+  var pg=0,ad=0,h='';
+  for(var i=0;i<E.length;i++){pg+=E[i].p||0;ad+=E[i].e||0;}
+  var tot=pg+ad,pct=tot>0?Math.round(pg/tot*100):0;
+  st('epg','R$'+pg.toFixed(2));st('epd','R$'+ad.toFixed(2));
+  st('ett','R$'+tot.toFixed(2));st('epct',pct+'%');
+  $$('ebar').style.width=pct+'%';
+  for(var i=0;i<E.length;i++){
+    var t=(E[i].p||0)+(E[i].e||0);
+    h+='<div class="eitem">'+
+      '<div class="ev">'+
+        (E[i].p>0?'<span class="epd">R$'+E[i].p.toFixed(2)+'</span>':'')+
+        (E[i].e>0?'<span class="edd">-R$'+E[i].e.toFixed(2)+'</span>':'')+
+        '<span class="etot">R$'+t.toFixed(2)+'</span>'+
+        '<button class="xb" onclick="delE('+i+')" style="display:block;float:none">&#x2715;</button>'+
+      '</div>'+
+      '<div class="eif"><span class="ename">'+esc(E[i].i)+'</span><span class="eprov">'+esc(E[i].f)+'</span></div>'+
+    '</div>';
+  }
+  $$('elist').innerHTML=h;
+}
+function delE(i){E.splice(i,1);updE();}
+function addE(){
+  var it=$$('eit'),fo=$$('efo'),pg=$$('epg2'),pe=$$('epe');
+  var v=(it?it.value:'').trim();
+  if(!v){toast('Digite o item!');return;}
+  E.push({i:v,f:(fo?fo.value.trim():'')||'---',p:parseFloat(pg?pg.value:0)||0,e:parseFloat(pe?pe.value:0)||0});
+  if(it)it.value='';if(fo)fo.value='';if(pg)pg.value='';if(pe)pe.value='';
+  updE();toast('Item adicionado!');
+}
+
+/* TAREFAS */
+function updT(){
+  var h='',td=0;
+  for(var i=0;i<T.length;i++){
+    if(T[i].d)td++;
+    h+='<div class="titem">'+
+      (T[i].m?'<span class="tmeta">'+esc(T[i].m)+'</span>':'')+
+      '<button class="xb" onclick="delT('+i+')" style="float:right">&#x2715;</button>'+
+      '<div class="tck'+(T[i].d?' done':'')+'" onclick="togT('+i+')">'+(T[i].d?'&#x2713;':'')+'</div>'+
+      '<span class="ttx'+(T[i].d?' done':'')+'">'+esc(T[i].t)+'</span>'+
+    '</div>';
+  }
+  $$('tlist').innerHTML=h;
+  st('std',td);st('stt',T.length);
+}
+function togT(i){T[i].d=!T[i].d;updT();updH();}
+function delT(i){T.splice(i,1);updT();}
+function addT(){
+  var tx=$$('ttx'),me=$$('tme');
+  var v=(tx?tx.value:'').trim();
+  if(!v){toast('Digite a tarefa!');return;}
+  T.push({t:v,m:me?me.value.trim():'',d:false});
+  if(tx)tx.value='';if(me)me.value='';
+  updT();toast('Tarefa adicionada!');
+}
+
+/* SALVAR */
+function doSave(){
+  var ok=false;
+  try{
+    localStorage.setItem('bdlv5',JSON.stringify({G:G,E:E,T:T}));ok=true;
+  }catch(ex){}
+  toast(ok?'Salvo!':'Dados na sessao atual');
+}
+
+/* COMPARTILHAR */
+function doShare(){
+  var c=0,p=0,pg=0,ad=0,td=0;
+  for(var i=0;i<G.length;i++)G[i].s==='Confirmado'?c++:p++;
+  for(var i=0;i<E.length;i++){pg+=E[i].p||0;ad+=E[i].e||0;}
+  for(var i=0;i<T.length;i++)if(T[i].d)td++;
+  var tot=pg+ad,nta=$$('nta'),N=nta?nta.value:'';
+  var txt='BOTECO DO LUIZ - 31 ANOS\n12/06/2026 | 12h as 18h\nEcovila Praia - R. Alto Araguaia, 01\n\n';
+  txt+='CONVIDADOS ('+G.length+'): '+c+' confirmados | '+p+' pendentes\n';
+  for(var i=0;i<G.length;i++)txt+=(G[i].s==='Confirmado'?'[OK] ':'[?]  ')+G[i].n+'\n';
+  txt+='\nORCAMENTO: Total R$'+tot.toFixed(2)+' | Pago R$'+pg.toFixed(2)+' | Pend R$'+ad.toFixed(2)+'\n';
+  for(var i=0;i<E.length;i++)txt+=E[i].i+' ('+E[i].f+'): R$'+((E[i].p||0)+(E[i].e||0)).toFixed(2)+'\n';
+  txt+='\nTAREFAS: '+td+'/'+T.length+'\n';
+  for(var i=0;i<T.length;i++)txt+='['+(T[i].d?'X':' ')+'] '+T[i].t+(T[i].m?' - '+T[i].m:'')+'\n';
+  txt+='\nNOTAS:\n'+N;
+  if(navigator.share){navigator.share({title:'Boteco do Luiz',text:txt}).catch(function(){});}
+  else{toast('Use Salvar para exportar');}
+}
+
+/* UPLOAD */
+var UF=[];
+function addF(inp){
+  var fl=$$('flist'),h='';
+  for(var i=0;i<inp.files.length;i++){
+    var f=inp.files[i];
+    if(f.size>50*1024*1024){toast('Arquivo muito grande');continue;}
+    UF.push({n:f.name,s:f.size,t:f.type});toast(f.name+' adicionado');
+  }
+  inp.value='';
+  for(var i=0;i<UF.length;i++){
+    var sz=UF[i].s<1024?UF[i].s+'B':UF[i].s<1048576?(UF[i].s/1024).toFixed(1)+'KB':(UF[i].s/1048576).toFixed(1)+'MB';
+    h+='<div class="fite">'+esc(UF[i].n)+' ('+sz+')</div>';
+  }
+  fl.innerHTML=h;
+}
+
+/* INIT — tudo sincrono, sem DOMContentLoaded */
+tick();
+updH();
+setInterval(tick,60000);
+</script>
+</body>
+</html>
